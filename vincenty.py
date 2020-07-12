@@ -4,7 +4,7 @@
 #b = 6356752.314245  # meters; b = (1 - f)a
 #f: flattening of the ellipsoid
 #a: radius of the ellipsoid, meteres
-#phil: latitude of the start point, decimal degrees
+#phi1: latitude of the start point, decimal degrees
 #lembda1: longitude of the start point, decimal degrees
 #alpha12: bearing, decimal degrees
 #s: Distance to endpoint, meters
@@ -39,7 +39,7 @@ def inverse(coord1,coord2,maxIter=200,tol=10**-12):
     global f
     global b
 
-    phi_1,L_1,=coord1                       # (lat=L_?,lon=phi_?)
+    phi_1,L_1,=coord1
     phi_2,L_2,=coord2
 
     u_1=atan((1-f)*tan(radians(phi_1)))
@@ -88,7 +88,7 @@ def inverse(coord1,coord2,maxIter=200,tol=10**-12):
         return -1
 
 
-def  direct(phi1, lembda1, alpha12, s) :
+def direct(phi1, lembda1, alpha12, s):
     global a
     global f
     global b

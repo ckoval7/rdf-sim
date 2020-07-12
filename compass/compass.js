@@ -62,7 +62,7 @@ function draw() {
             //var res = str.slice(5, 8);
             //console.log(response);
             //console.log(response.slice(5,str.lastIndexOf(response)-5));
-            console.log(DOA_deg);
+            //console.log(DOA_deg);
 
         }
 
@@ -117,7 +117,7 @@ function draw() {
 
 function imgLoaded() {
 	// Image loaded event complete.  Start the timer
-	setInterval(draw, 100);
+	setInterval(draw, 500);
 }
 
 function init() {
