@@ -36,5 +36,5 @@ if __name__ == '__main__':
     coord2 = (39.13057, -76.51524)
     speed = 26
     resolution = 0.5
-    coord_list = interpolate(coord1, coord2, speed, resolution)
+    coord_list = interpolate_two_points(coord1, coord2, speed, resolution)
     #print(coord_list)
