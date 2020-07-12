@@ -34,7 +34,7 @@ class transmitter:
 #General Variables:
 resolution = 0.5 #Rate to refresh the loop, seconds
 #Set TX Freq
-freq = 162.4 #Arbitray
+freq = 162.4 #Arbitrary
 
 #Name DF Stations
 alpha = receiver("DF_ALPHA")
@@ -54,7 +54,6 @@ alpha.path_file = "path.csv"
 with open(alpha.path_file, 'r') as file:
     reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
     alpha.waypoints = list(reader)
-#alpha_lat_lon = next(rx_latlon_alpha)
 alpha.speed = 26.8 #speed m/s
 alpha.interpolated_location = mover.interpolate_all_points(alpha.waypoints, alpha.speed, resolution)
 
@@ -64,7 +63,6 @@ tx.path_file = 'catonsville_path.csv'
 with open(tx.path_file, 'r') as file:
    reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
    tx.waypoints = list(reader)
-   #lat,lon
 tx.speed = 20.12 #m/s
 tx.interpolated_location = mover.interpolate_all_points(tx.waypoints, tx.speed, resolution)
 
@@ -79,7 +77,7 @@ try:
         tx.next_location = next(tx_motion)
         receiver_sim.rx(alpha.station_id, alpha.DOA_res_fd, alpha.location, freq, tx.location, alpha.heading)
         receiver_sim.rx(bravo.station_id, bravo.DOA_res_fd, bravo.location, freq, tx.location, bravo.heading)
-        #receiver_sim.wr_xml(DOA_res_fd_tx, "tx", freq, current_tx_position, 0, 0, 0, 0)
+        #receiver_sim.wr_xml(DOA_res_fd_tx, "tx", freq, tx.location, 0, 0, 0, 0)
         alpha.location = alpha.next_location
         tx.location = tx.next_location
         sleep(resolution)
