@@ -18,8 +18,8 @@ sudo systemctl enable ram.mount
 sudo systemctl start ram.mount
 ```
 
-If you don't want to use the compass or run a web server, just run `python3 run_df_sim.py`
+If you don't want to use the compass or run a web server, just run `python3 run_df_sim.py`. XML data can be retrieved directly from `/ram/`.
 
-If you would like to use the compass feature or host this on a remote machine, use `./run.sh`
+If you would like to use the compass feature or host this on a remote machine, use `./run.sh`. This defaults to port 8080, but can be modified in the script. 
 
 Please refer to the wiki for customizing the script.
