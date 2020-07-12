@@ -69,14 +69,14 @@ with open(tx.path_file, 'r') as file:
    tx.waypoints = list(reader)
 tx.speed = 20.12 #m/s
 tx.interpolated_location = mover.interpolate_all_points(tx.waypoints, tx.speed, resolution)
+tx_motion = cycle(tx.interpolated_location)
+rx_alpha_motion = cycle(alpha.interpolated_location)
+tx.location = next(tx_motion)
+alpha.location = next(rx_alpha_motion)
+tx.uptime = 60
+tx.downtime = 180
+next_time = round(time()) + tx.uptime
 
-    tx_motion = cycle(tx.interpolated_location)
-    rx_alpha_motion = cycle(alpha.interpolated_location)
-    tx.location = next(tx_motion)
-    alpha.location = next(rx_alpha_motion)
-    tx.uptime = 60
-    tx.downtime = 180
-    next_time = round(time()) + tx.uptime
 try:
     while True:
         if round(time()) > next_time:
