@@ -63,20 +63,25 @@ def pathloss(distance):
     SNR=(Pr-10*math.log10(Pn)) + fudge_factor;
     return round(SNR/2, 4)
 
-def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0):
+def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0, tx_active = True):
     dist_and_heading = vincenty.inverse(rx_location, tx_location)
     distance_to_target = dist_and_heading[0]
     raw_doa = dist_and_heading[1]
-    pwr = pathloss(distance_to_target)
-    conf = min(int(round(0.2*pwr**2, 0)), 255)
+    if tx_active == True:
+        pwr = pathloss(distance_to_target)
+        conf = min(int(round(0.2*pwr**2, 0)), 255)
+        err_factor=90*math.exp(-conf/8)
+        doa_error = int(random.triangular(-err_factor,err_factor,0))
+        doa = round(doa_error + raw_doa - heading)
+        if doa < 0:
+            doa += 360
+        elif doa > 359:
+            doa -= 360
+    else:
+        pwr = round(random.random() + random.randint(0,3), 4)
+        conf = random.randint(0,10)
+        doa = random.randint(0, 359)
     #Add Error:
-    err_factor=90*math.exp(-conf/8)
-    doa_error = int(random.triangular(-err_factor,err_factor,0))
-    doa = round(doa_error + raw_doa - heading)
-    if doa < 0:
-        doa += 360
-    elif doa > 359:
-        doa -= 360
     doa = 360 - doa #Simulates KSDR Inverted Bearing
     wr_xml(DOA_res_fd, station_id, freq, rx_location, heading, doa, conf, pwr)
 

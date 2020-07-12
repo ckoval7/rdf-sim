@@ -3,8 +3,6 @@
 const MIN_PWR = 0;
 const MIN_CONF = 0;
 
-// www.mysite.com/my_app.html?Use_Id=abc
-
 var GET = {};
 var query = window.location.search.substring(1).split("&");
 for (var i = 0, max = query.length; i < max; i++)
