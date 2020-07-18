@@ -5,7 +5,6 @@ from time import time
 import csv
 
 import receiver_sim
-import mover
 import vincenty
 
 class receiver:
@@ -59,7 +58,7 @@ with open(alpha.path_file, 'r') as file:
     reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
     alpha.waypoints = list(reader)
 alpha.speed = 26.8 #speed m/s
-alpha.interpolated_location = mover.interpolate_all_points(alpha.waypoints, alpha.speed, resolution)
+alpha.interpolated_location = receiver_sim.interpolate_all_points(alpha.waypoints, alpha.speed, resolution)
 
 tx = transmitter()
 tx.path_file = 'catonsville_path.csv'
@@ -68,7 +67,7 @@ with open(tx.path_file, 'r') as file:
    reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
    tx.waypoints = list(reader)
 tx.speed = 20.12 #m/s
-tx.interpolated_location = mover.interpolate_all_points(tx.waypoints, tx.speed, resolution)
+tx.interpolated_location = receiver_sim.interpolate_all_points(tx.waypoints, tx.speed, resolution)
 tx_motion = cycle(tx.interpolated_location)
 rx_alpha_motion = cycle(alpha.interpolated_location)
 tx.location = next(tx_motion)
