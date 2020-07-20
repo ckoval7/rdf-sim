@@ -85,6 +85,7 @@ def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0, tx_act
     wr_xml(DOA_res_fd, station_id, freq, rx_location, heading, doa, conf, pwr)
 
 def interpolate_two_points(coord1, coord2, speed, resolution):
+    if coord1 == coord2: return coord1
     distance_and_heading = vincenty.inverse(coord1, coord2)
     distance = distance_and_heading[0]
     #print(f"Distance: {distance}")

@@ -46,10 +46,10 @@ if __name__ == '__main__':
         rx_path = []
         tx_path = []
         while True:
-            rx_path.append(start_logging(url_a))
+            #rx_path.append(start_logging(url_a))
             tx_path.append(start_logging(url_tx))
             sleep(1)
     except KeyboardInterrupt:
         ls = kml.newlinestring(name='Path')
-        finish_logging("rx1.kml", "RX Path", rx_path)
+        #finish_logging("rx1.kml", "RX Path", rx_path)
         finish_logging("tx1.kml", "TX Path", tx_path)
