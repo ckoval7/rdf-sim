@@ -83,9 +83,9 @@ def inverse(coord1,coord2,maxIter=200,tol=10**-12):
 
         alpha12 = get_heading(coord1, coord2)
         m=(b*A*(sigma-delta_sig))#/1000                # output distance in m
-        return m,alpha12
+        return (m,alpha12)
     except ZeroDivisionError:
-        return -1
+        return (0,0)
 
 
 def direct(phi1, lembda1, alpha12, s):
@@ -152,4 +152,4 @@ def direct(phi1, lembda1, alpha12, s):
     phi2 = phi2 * 45.0 / piD4
     lembda2 = lembda2 * 45.0 / piD4
     alpha21 = alpha21 * 45.0 / piD4
-    return phi2, lembda2#, alpha21
+    return (phi2, lembda2)#, alpha21
