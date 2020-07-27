@@ -1,5 +1,8 @@
 <html>
 <head>
+  <link rel="icon"
+      type="image/png"
+      href="/fox.png">
   <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
