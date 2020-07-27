@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # WGS 84
 #a = 6378137  # meters
 #f = 1 / 298.257223563
@@ -8,7 +9,7 @@
 #lembda1: longitude of the start point, decimal degrees
 #alpha12: bearing, decimal degrees
 #s: Distance to endpoint, meters
-
+import sys
 from math import atan
 from math import atan2
 from math import cos
@@ -88,7 +89,7 @@ def inverse(coord1,coord2,maxIter=200,tol=10**-12):
         return (0,0)
 
 
-def direct(phi1, lembda1, alpha12, s):
+def direct(phi1, lembda1, alpha12, s): #lat, lon, bearing, distance
     global a
     global f
     global b
@@ -153,3 +154,30 @@ def direct(phi1, lembda1, alpha12, s):
     lembda2 = lembda2 * 45.0 / piD4
     alpha21 = alpha21 * 45.0 / piD4
     return (phi2, lembda2)#, alpha21
+
+if __name__ == '__main__':
+    help = """Usage:
+    vincenty.py [option] [value1] [value2] [value3] [value4]
+    Get distance between two points in meters:
+        vincenty.py inverse lat1 lon1 lat2 lon2
+    Get coordinate at a given distance and heading:
+        vincenty.py direct lat1 lon1 heading distance
+    Get the heading between two coordinates:
+        vincenty.py heading lat1 lon1 lat2 lon2"""
+    try:
+        op1 = float(sys.argv[2])
+        op2 = float(sys.argv[3])
+        op3 = float(sys.argv[4])
+        op4 = float(sys.argv[5])
+
+        if sys.argv[1] == "inverse":
+            output = inverse((op1, op2),(op3, op4))[0]
+        elif sys.argv[1] == "direct":
+            output = str(direct(op1, op2, op3, op4))[1:-1]
+        elif sys.argv[1] == "heading":
+            output = get_heading((op1, op2),(op3, op4))
+        else:
+            output = help
+        print(output)
+    except:
+        print(help)
