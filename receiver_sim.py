@@ -69,7 +69,7 @@ def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0, tx_act
     if tx_active == True:
         pwr = pathloss(distance_to_target)
         conf = min(int(round(0.1*pwr**2, 0)), 255)
-        err_factor= 30*math.exp(-conf/5)
+        err_factor= 30*math.exp(-conf/8)
         doa_error = int(random.triangular(-err_factor,err_factor,0))
         doa = round(doa_error + raw_doa - heading)
         if doa < 0:
