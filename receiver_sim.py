@@ -41,35 +41,43 @@ def wr_xml(DOA_res_fd, station_id, freq, location, heading, doa, conf, pwr):
     DOA_res_fd.write(html_str)
     DOA_res_fd.truncate()
 
-def pathloss(distance):
-    d=distance; #Distance between base station and mobile station
-    Pt=10; #BS transmitted power in watts
-    Lo=8;   #Total system losses in dB
-    T=290;   #temperature in degree kelvin
+def pathloss(distance, freq, tx_pwr = 50):
+    ## TX POWER IS IN dBm!!! ##
+    ## DISTANCE IS IN METERS!!! ##
+    d = distance #Distance between base station and mobile station
+    #Lo=8;   #Total system losses in dB
+    T = 290
     BW=15*10**3; #in Hz
-    Gb=8;  #in dB
-    Gm=0;   #in dB
-    Hb=30;  #in metres
-    Hm=3.;   #in metres
+    #Gb=8;  #in dB
+    # Gm=0;   #in dB
+    # Hb=30;  #in metres
+    # Hm=3.;   #in metres
     B=1.38*10**-23; #Boltzmann's constant
-    #Calculations&Results
-    Free_Lp=20*math.log10(Hm*Hb/d**2);
-    Pr=Free_Lp-Lo+Gm+Gb+Pt;  #in dBW
+    # #Calculations&Results
+    # Pr=Free_Lp-Lo+Gm+Gb+Pt;  #in dBW
     Te=T*(3.162-1);
     Pn=B*(Te+T)*BW;
-    #print('Received signal power is %d dBW \n'%(10*math.log10(Pn)))
+    wavelength = freq/299.8
+    path_loss = 20*math.log10((4*math.pi*d)/wavelength)
+    Pr = tx_pwr - path_loss
     fudge_factor = random.randint(-10, 0)
-    SNR=(Pr-10*math.log10(Pn)) + fudge_factor;
+    SNR=(Pr-10*math.log10(Pn)) + fudge_factor
     return round(SNR/2, 4)
+
+def nosignal():
+    pwr = round(random.random() + random.randint(0,3), 4)
+    conf = random.randint(0,10)
+    doa = random.randint(0, 359)
+    return pwr, conf, doa
 
 def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0, tx_active = True):
     dist_and_heading = vincenty.inverse(rx_location, tx_location)
     distance_to_target = dist_and_heading[0]
     raw_doa = dist_and_heading[1]
-    if tx_active == True:
-        pwr = pathloss(distance_to_target)
+    pwr = pathloss(distance_to_target, freq)
+    if tx_active and pwr > 1 == True:
         conf = min(int(round(0.1*pwr**2, 0)), 255)
-        err_factor= 30*math.exp(-conf/8)
+        err_factor= 30*math.exp(-conf/8) + 3
         doa_error = int(random.triangular(-err_factor,err_factor,0))
         doa = round(doa_error + raw_doa - heading)
         if doa < 0:
@@ -77,9 +85,7 @@ def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0, tx_act
         elif doa > 359:
             doa -= 360
     else:
-        pwr = round(random.random() + random.randint(0,3), 4)
-        conf = random.randint(0,10)
-        doa = random.randint(0, 359)
+        pwr, conf, doa = nosignal()
     #Add Error:
     doa = 360 - doa #Simulates KSDR Inverted Bearing
     wr_xml(DOA_res_fd, station_id, freq, rx_location, heading, doa, conf, pwr)
