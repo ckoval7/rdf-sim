@@ -4,11 +4,34 @@ import math
 import random
 import xml.etree.ElementTree as ET
 
-from itertools import cycle
-
 import vincenty
 
-def wr_xml(DOA_res_fd, station_id, freq, location, heading, doa, conf, pwr):
+class receiver:
+    def __init__(self, station_id):
+        self.station_id = station_id
+
+    heading = 0
+    speed = 0
+    location = ()
+    next_location = ()
+    path_file = ""
+    waypoints = []
+    interpolated_location = []
+
+class transmitter:
+    heading = 0
+    speed = 0
+    location = ()
+    next_location = ()
+    path_file = ""
+    waypoints = []
+    interpolated_location = []
+    is_active = True
+    uptime = 0
+    downtime = 0
+
+def wr_xml(station_id, freq, location, heading, doa, conf, pwr):
+# def wr_xml(DOA_res_fd, station_id, freq, location, heading, doa, conf, pwr):
     latitude = location[0]
     longitude = location[1]
     epoch_time = int(1000 * round(time.time(), 3))
@@ -37,9 +60,10 @@ def wr_xml(DOA_res_fd, station_id, freq, location, heading, doa, conf, pwr):
 
     # create a new XML file with the results
     html_str = ET.tostring(data, encoding="unicode")
-    DOA_res_fd.seek(0)
-    DOA_res_fd.write(html_str)
-    DOA_res_fd.truncate()
+    # DOA_res_fd.seek(0)
+    # DOA_res_fd.write(html_str)
+    # DOA_res_fd.truncate()
+    return html_str
 
 def pathloss(distance, freq, tx_pwr = 50):
     ## TX POWER IS IN dBm!!! ##
@@ -70,7 +94,8 @@ def nosignal():
     doa = random.randint(0, 359)
     return pwr, conf, doa
 
-def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0, tx_active = True):
+def rx(rx_location, freq, tx_location, heading=0, tx_active = True):
+# def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0, tx_active = True):
     dist_and_heading = vincenty.inverse(rx_location, tx_location)
     distance_to_target = dist_and_heading[0]
     raw_doa = dist_and_heading[1]
@@ -88,7 +113,9 @@ def rx(station_id, DOA_res_fd, rx_location, freq, tx_location, heading=0, tx_act
         pwr, conf, doa = nosignal()
     #Add Error:
     doa = 360 - doa #Simulates KSDR Inverted Bearing
-    wr_xml(DOA_res_fd, station_id, freq, rx_location, heading, doa, conf, pwr)
+    return freq, rx_location, heading, doa, conf, pwr
+    # wr_xml(station_id, freq, rx_location, heading, doa, conf, pwr)
+    # wr_xml(DOA_res_fd, station_id, freq, rx_location, heading, doa, conf, pwr)
 
 def interpolate_two_points(coord1, coord2, speed, resolution):
     if coord1 == coord2: return coord1
