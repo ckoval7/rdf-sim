@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser = OptionParser(usage=usage)
     parser.add_option("--ip", dest="ipaddr", help="IP Address to serve from. Default 127.0.0.1",
     metavar="IP ADDRESS", type="str", default="127.0.0.1")
-    parser.add_option("--port", dest="port", help="Port number to serve from. Default 8080",
+    parser.add_option("--port", dest="port", help="Port number to serve from. Default 8081",
     metavar="NUMBER", type="int", default=8081)
 
     web = threading.Thread(target=start_server,args=(options.ipaddr, options.port))
