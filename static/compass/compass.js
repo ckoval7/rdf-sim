@@ -23,7 +23,7 @@ var     img = null,
   PWR_val = 0,
   CONF_val = 0,
   first_entry = 1,
-	web_root = "../"
+	web_root = "/"
 	DOA_source = web_root.concat(GET.station_id.concat(".xml"));
 
 function clearCanvas() {

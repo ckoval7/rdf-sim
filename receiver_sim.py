@@ -17,6 +17,7 @@ class receiver:
     path_file = ""
     waypoints = []
     interpolated_location = []
+    current_info = ()
 
 class transmitter:
     heading = 0

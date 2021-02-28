@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from itertools import cycle
 from time import sleep
 from time import time
@@ -5,6 +7,7 @@ from bottle import route, run, request, get, post, put, response, redirect, temp
 from optparse import OptionParser
 from os import system, name, kill, getpid
 
+import signal,sys
 import csv
 import threading
 
@@ -17,16 +20,34 @@ def server_static(filepath):
     response.set_header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
     return response
 
+@get('/<station_id>.xml')
+def xml_out(station_id):
+    if station_id == alpha.station_id:
+        station = alpha
+    elif station_id == bravo.station_id:
+        station = bravo
+    else:
+        return "<h3>Invalid Station ID</h3>"
+    response.set_header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+    output = receiver_sim.wr_xml(station.station_id, *station.current_info)
+    return str(output)
+
+@get('/')
+@get('/home')
+@get('/index.html')
+def home():
+    return template('index.tpl')
+
 def start_server(ipaddr = "127.0.0.1", port=8081):
     try:
         run(host=ipaddr, port=port, quiet=True, server="paste", debug=True)
     except OSError:
         print(f"Port {port} seems to be in use. Please select another port or " +
-        "check if another instance of DFA is already running.")
+        "check if another instance of rdf-sim is already running.")
         finish()
 
 def finish():
-    print("Dying, please wait.")
+    print("\nDying, please wait.")
     kill(getpid(), signal.SIGTERM)
 
 if __name__ == '__main__':
@@ -36,6 +57,7 @@ if __name__ == '__main__':
     metavar="IP ADDRESS", type="str", default="127.0.0.1")
     parser.add_option("--port", dest="port", help="Port number to serve from. Default 8081",
     metavar="NUMBER", type="int", default=8081)
+    (options, args) = parser.parse_args()
 
     web = threading.Thread(target=start_server,args=(options.ipaddr, options.port))
     web.daemon = True
@@ -60,7 +82,7 @@ if __name__ == '__main__':
 
     #Open path files for moving objects:
     #Moving RX:
-    alpha.path_file = "path.csv"
+    alpha.path_file = "rx_example_path.csv"
     with open(alpha.path_file, 'r') as file:
         reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
         alpha.waypoints = list(reader)
@@ -68,7 +90,7 @@ if __name__ == '__main__':
     alpha.interpolated_location = receiver_sim.interpolate_all_points(alpha.waypoints, alpha.speed, resolution)
 
     tx = receiver_sim.transmitter()
-    tx.path_file = 'catonsville_path.csv'
+    tx.path_file = 'tx_example_path.csv'
     #Moving TX:
     with open(tx.path_file, 'r') as file:
        reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
@@ -93,8 +115,8 @@ if __name__ == '__main__':
             alpha.next_location = next(rx_alpha_motion)
             alpha.heading = round(vincenty.get_heading(alpha.location, alpha.next_location), 1)
             tx.next_location = next(tx_motion)
-            receiver_sim.rx(alpha.station_id, alpha.location, freq, tx.location, alpha.heading, tx.is_active)
-            receiver_sim.rx(bravo.station_id, bravo.location, freq, tx.location, bravo.heading, tx.is_active)
+            alpha.current_info = receiver_sim.rx(alpha.location, freq, tx.location, alpha.heading, tx.is_active)
+            bravo.current_info = receiver_sim.rx(bravo.location, freq, tx.location, bravo.heading, tx.is_active)
             #receiver_sim.wr_xml(DOA_res_fd_tx, "tx", freq, tx.location, 0, 0, 0, 0)
             alpha.location = alpha.next_location
             tx.location = tx.next_location
