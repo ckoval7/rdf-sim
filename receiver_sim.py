@@ -3,6 +3,7 @@ import time
 import math
 import random
 import xml.etree.ElementTree as ET
+from lxml import etree
 
 import vincenty
 
@@ -10,6 +11,28 @@ class receiver:
     def __init__(self, station_id):
         self.station_id = station_id
 
+    def from_gps(self):
+        try:
+            xml_contents = etree.parse(self.client_url)
+            xml_station_id = xml_contents.find('STATION_ID')
+            self.station_id = xml_station_id.text
+            xml_latitude = xml_contents.find('LATITUDE')
+            latitude = float(xml_latitude.text)
+            xml_longitude = xml_contents.find('LONGITUDE')
+            longitude = float(xml_longitude.text)
+            xml_heading = xml_contents.find('HEADING')
+            self.heading = float(xml_heading.text)
+        except KeyboardInterrupt:
+            finish()
+        except Exception as ex:
+            latitude = 0.0
+            longitude = 0.0
+            self.heading = 0.0
+            print(ex)
+            print(f"Problem connecting to {self.client_url}")
+        self.location = (latitude, longitude)
+
+    client_url = ""
     heading = 0
     speed = 0
     location = ()

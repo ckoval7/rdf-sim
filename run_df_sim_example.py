@@ -26,6 +26,8 @@ def xml_out(station_id):
         station = alpha
     elif station_id == bravo.station_id:
         station = bravo
+    elif station_id == charlie.station_id:
+        station = charlie
     else:
         return "<h3>Invalid Station ID</h3>"
     response.set_header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
@@ -73,6 +75,9 @@ if __name__ == '__main__':
 
     bravo = receiver_sim.receiver("DF_BRAVO")
 
+    charlie = receiver_sim.receiver("DF_CHARLIE")
+    charlie.client_url = "http://127.0.0.1:8080/position.xml"
+
     #Set fixed RX Location
     bravo.location = (39.253828, -76.759702)
     bravo.heading = 11
@@ -117,7 +122,8 @@ if __name__ == '__main__':
             tx.next_location = next(tx_motion)
             alpha.current_info = receiver_sim.rx(alpha.location, freq, tx.location, alpha.heading, tx.is_active)
             bravo.current_info = receiver_sim.rx(bravo.location, freq, tx.location, bravo.heading, tx.is_active)
-            #receiver_sim.wr_xml(DOA_res_fd_tx, "tx", freq, tx.location, 0, 0, 0, 0)
+            charlie.from_gps()
+            charlie.current_info = receiver_sim.rx(charlie.location, freq, tx.location, charlie.heading, tx.is_active)
             alpha.location = alpha.next_location
             tx.location = tx.next_location
             sleep(resolution)

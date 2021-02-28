@@ -26,5 +26,10 @@
     <li><a href="DF_BRAVO.xml">XML Data</a></li>
     <li><a href="/static/compass/compass.html?station_id=DF_BRAVO">Compass</a></li>
   </ul>
+  <h4>DF Station Charlie:</h4>
+  <ul>
+    <li><a href="DF_CHARLIE.xml">XML Data</a></li>
+    <li><a href="/static/compass/compass.html?station_id=DF_CHARLIE">Compass</a></li>
+  </ul>
 </body>
 </html>
