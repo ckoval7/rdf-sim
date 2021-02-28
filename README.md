@@ -5,4 +5,8 @@ Please note **the bearing output is inverted** to stay consistent with the curre
 
 #### Usage:
 
-New Instructions coming soon. In the mean time, you can simply run `run_df_sim_example.py`.
+New Instructions coming soon.
+
+Install dependencies: `pip3 install -r requirements.txt`
+
+Then run `run_df_sim_example.py`.
