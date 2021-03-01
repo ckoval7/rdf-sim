@@ -16,7 +16,7 @@ def start_server(ipaddr = "0.0.0.0", port=8080):
         run(host=ipaddr, port=port, quiet=True, server="paste", debug=True)
     except OSError:
         print(f"Port {port} seems to be in use. Please select another port or " +
-        "check if another instance of %prog is already running.")
+        "check if another program is already using that port.")
         finish()
 
 def finish():
