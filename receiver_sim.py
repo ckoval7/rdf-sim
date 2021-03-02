@@ -40,6 +40,7 @@ class receiver:
     path_file = ""
     waypoints = []
     interpolated_location = []
+    motion = ()
     current_info = ()
 
 class transmitter:
@@ -50,9 +51,11 @@ class transmitter:
     path_file = ""
     waypoints = []
     interpolated_location = []
+    motion = ()
     is_active = True
     uptime = 0
     downtime = 0
+    power = 0
 
 def wr_xml(station_id, freq, location, heading, doa, conf, pwr):
 # def wr_xml(DOA_res_fd, station_id, freq, location, heading, doa, conf, pwr):

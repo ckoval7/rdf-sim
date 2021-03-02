@@ -52,6 +52,9 @@ def xml_out(station_id):
     output = receiver_sim.wr_xml(station.station_id, *station.current_info)
     return str(output)
 
+receivers = []
+transmitters = []
+
 if __name__ == '__main__':
     usage = "usage: %prog [options]"
     parser = OptionParser(usage=usage)
@@ -71,46 +74,43 @@ if __name__ == '__main__':
     freq = 162.4 #Arbitrary
 
     #Name DF Stations
-    alpha = receiver_sim.receiver("DF_ALPHA")
+    receivers.append(receiver_sim.receiver("DF_ALPHA"))
+    receivers[-1].path_file = "rx_example_path.csv"
+      with open(receivers[-1].path_file, 'r') as file:
+          reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
+          receivers[-1].waypoints = list(reader)
+      receivers[-1].speed = 26.8 #speed m/s
+      receivers[-1].interpolated_location = receiver_sim.interpolate_all_points(receivers[-1].waypoints, receivers[-1].speed, resolution)
+      rx_receivers[-1]_motion = cycle(receivers[-1].interpolated_location)
+      receivers[-1].location = next(rx_receivers[-1]_motion)
+    # alpha = receivers[-1]
 
-    bravo = receiver_sim.receiver("DF_BRAVO")
+    receivers.append(receiver_sim.receiver("DF_BRAVO"))
+    receivers[-1].location = (39.253828, -76.759702)
+    receivers[-1].heading = 11
+    # bravo = receivers[-1]
 
-    charlie = receiver_sim.receiver("DF_CHARLIE")
-    charlie.client_url = "http://127.0.0.1:8080/position.xml"
+    receivers.append(receiver_sim.receiver("DF_CHARLIE"))
+    receivers[-1].client_url = "http://127.0.0.1:8080/position.xml"
+    # charlie = receivers[-1]
 
-    #Set fixed RX Location
-    bravo.location = (39.253828, -76.759702)
-    bravo.heading = 11
 
-    #Use to debug tx location:
-    #DOA_res_fd_tx = open("/ram/tx.xml","w")
-
-    #Open path files for moving objects:
-    #Moving RX:
-    alpha.path_file = "rx_example_path.csv"
-    with open(alpha.path_file, 'r') as file:
-        reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
-        alpha.waypoints = list(reader)
-    alpha.speed = 26.8 #speed m/s
-    alpha.interpolated_location = receiver_sim.interpolate_all_points(alpha.waypoints, alpha.speed, resolution)
-    rx_alpha_motion = cycle(alpha.interpolated_location)
-    alpha.location = next(rx_alpha_motion)
-
-    tx = receiver_sim.transmitter()
-    tx.path_file = 'tx_example_path.csv'
+    transmitters.append(receiver_sim.transmitter())
     #Moving TX:
-    with open(tx.path_file, 'r') as file:
-       reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
-       tx.waypoints = list(reader)
-    tx.speed = 20.12 #m/s
-    tx.interpolated_location = receiver_sim.interpolate_all_points(tx.waypoints, tx.speed, resolution)
-    tx_motion = cycle(tx.interpolated_location)
-    tx.location = next(tx_motion)
-    tx.uptime = 60
-    tx.downtime = 180
-    next_time = round(time()) + tx.uptime
+    transmitters[-1].path_file = 'tx_example_path.csv'
+    with open(transmitters[-1].path_file, 'r') as file:
+        reader = csv.reader(file, quoting=csv.QUOTE_NONNUMERIC)
+        transmitters[-1].waypoints = list(reader)
+    transmitters[-1].speed = 20.12 #m/s
+    transmitters[-1].interpolated_location = receiver_sim.interpolate_all_points(transmitters[-1].waypoints, transmitters[-1].speed, resolution)
+    tx_motion = cycle(transmitters[-1].interpolated_location)
+    transmitters[-1].location = next(tx_motion)
+    transmitters[-1].uptime = 60
+    transmitters[-1].downtime = 180
+    tx = transmitters[-1]
 
     try:
+        next_time = round(time()) + tx.uptime
         while True:
             if round(time()) > next_time:
                 tx.is_active = not tx.is_active
@@ -120,10 +120,11 @@ if __name__ == '__main__':
             alpha.next_location = next(rx_alpha_motion)
             alpha.heading = round(vincenty.get_heading(alpha.location, alpha.next_location), 1)
             tx.next_location = next(tx_motion)
-            alpha.current_info = receiver_sim.rx(alpha.location, freq, tx.location, alpha.heading, tx.is_active)
-            bravo.current_info = receiver_sim.rx(bravo.location, freq, tx.location, bravo.heading, tx.is_active)
             charlie.from_gps()
-            charlie.current_info = receiver_sim.rx(charlie.location, freq, tx.location, charlie.heading, tx.is_active)
+
+            for rx in receivers:
+                rx.current_info = receiver_sim.rx(rx.location, freq, tx.location, rx.heading, tx.is_active)\
+
             alpha.location = alpha.next_location
             tx.location = tx.next_location
             sleep(resolution)
