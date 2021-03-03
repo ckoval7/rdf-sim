@@ -4,6 +4,7 @@ from os import system, name, kill, getpid
 from bottle import route, run, request, get, response, redirect, template, static_file
 import signal,sys
 import threading
+from optparse import OptionParser
 
 imports = """#!/usr/bin/env python3
 
@@ -178,3 +179,6 @@ if __name__ == '__main__':
     web = threading.Thread(target=start_server,args=(options.ipaddr, options.port))
     web.daemon = True
     web.start()
+
+    while True:
+        pass

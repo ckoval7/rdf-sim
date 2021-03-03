@@ -89,7 +89,6 @@ if __name__ == '__main__':
     receivers[-1].client_url = "http://127.0.0.1:8080/position.xml"
     # charlie = receivers[-1]
 
-
     transmitters.append(receiver_sim.transmitter())
     #Moving TX:
     transmitters[-1].path_file = 'tx_example_path.csv'

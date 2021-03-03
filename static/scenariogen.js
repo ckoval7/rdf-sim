@@ -3,10 +3,12 @@ function loadPage() {
 }
 
 function addNewRx() {
+  console.log("New RX Test");
   //Add another receiver
 }
 
 function addNewTx() {
+  console.log("New TX Test")
   //Add another transmitter
 }
 
