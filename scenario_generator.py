@@ -5,8 +5,9 @@ from bottle import route, run, request, get, response, redirect, template, stati
 import signal,sys
 import threading
 
-imports = """
-#!/usr/bin/env python3
+imports = """#!/usr/bin/env python3
+
+# This file was generated using the scenario generator
 
 from itertools import cycle
 from random import randint
@@ -36,6 +37,15 @@ def server_static(filepath):
 # def home():
 # # Set up a home page for your scenario
 #     return template('index.tpl')
+
+@get('/<station_id>.xml')
+def xml_out(station_id):
+    response.set_header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+    for x in receivers:
+        if station_id == x.station_id:
+            return str(receiver_sim.wr_xml(x.station_id, *x.current_info))
+        else:
+            return "<h3>Invalid Station ID</h3>"
 
 def start_server(ipaddr = "127.0.0.1", port=8081):
     try:
@@ -98,6 +108,11 @@ def create_stationary_rx(latitude, longitude, heading):
     receivers[-1].heading = {heading}
     """
 
+def create_gps_rx(url):
+    return f"""
+    receivers[-1].client_url = '{url}'
+    """
+
 def create_moving_tx(path, speed, uptime, downtime):
     return f"""
     transmitters[-1].path_file = '{path}'
@@ -117,6 +132,13 @@ def create_moving_tx(path, speed, uptime, downtime):
 def create_stationary_tx(latitude, longitude, uptime, downtime):
     return f"""
     transmitters[-1].location = ({latitude}, {longitude})
+    transmitters[-1].uptime = lambda: {uptime}
+    transmitters[-1].downtime = lambda: {downtime}
+    """
+
+def create_gps_tx(url, uptime, downtime):
+    return f"""
+    transmitters[-1].client_url = '{url}'
     transmitters[-1].uptime = lambda: {uptime}
     transmitters[-1].downtime = lambda: {downtime}
     """

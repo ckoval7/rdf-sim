@@ -44,6 +44,23 @@ class receiver:
     current_info = ()
 
 class transmitter:
+    def from_gps(self):
+        try:
+            xml_contents = etree.parse(self.client_url)
+            xml_latitude = xml_contents.find('LATITUDE')
+            latitude = float(xml_latitude.text)
+            xml_longitude = xml_contents.find('LONGITUDE')
+            longitude = float(xml_longitude.text)
+        except KeyboardInterrupt:
+            finish()
+        except Exception as ex:
+            latitude = 0.0
+            longitude = 0.0
+            print(ex)
+            print(f"Problem connecting to {self.client_url}")
+        self.location = (latitude, longitude)
+
+    client_url = ""
     heading = 0
     speed = 0
     location = ()

@@ -40,17 +40,12 @@ def finish():
 
 @get('/<station_id>.xml')
 def xml_out(station_id):
-    if station_id == alpha.station_id:
-        station = alpha
-    elif station_id == bravo.station_id:
-        station = bravo
-    elif station_id == charlie.station_id:
-        station = charlie
-    else:
-        return "<h3>Invalid Station ID</h3>"
     response.set_header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
-    output = receiver_sim.wr_xml(station.station_id, *station.current_info)
-    return str(output)
+    for x in receivers:
+        if station_id == x.station_id:
+            return str(receiver_sim.wr_xml(x.station_id, *x.current_info))
+        else:
+            return "<h3>Invalid Station ID</h3>"
 
 receivers = []
 transmitters = []
