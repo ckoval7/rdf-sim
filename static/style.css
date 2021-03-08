@@ -71,6 +71,9 @@ p, ul {
   padding: 5px;
   margin: 5px;
   width: 400px;
+  background-color: #aaa;
+  color: black;
+  vertical-align: top;
 }
 
 .field_labels {
@@ -78,4 +81,26 @@ p, ul {
   width: 140px;
   float: left;
   padding-top: 5px;
+}
+
+.event_div {
+  display: inline-block;
+  /* border-style: solid;
+  border-width: 1px; */
+  padding: 5px;
+  margin: 5px;
+  background-color: #333;
+  width: auto;
+  color: white;
+}
+
+.scenario_div {
+  color: white;
+  display: inline-block;
+  /* border-style: solid;
+  border-width: 1px; */
+  padding: 5px;
+  margin: 5px;
+  background-color: #666;
+  width: auto;
 }
