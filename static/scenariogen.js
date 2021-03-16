@@ -1,13 +1,142 @@
+let transmitters = [];
+let receivers = [];
+
 function loadPage() {
   addNewTx(0);
   addNewRx(0);
   //Set up the initial TX and RX fields
 }
 
+function setEventName() {
+
+}
+
+function setScenarioName(id_num) {
+
+}
+
+function setScenarioFreq(id_num) {
+
+}
+
+//rx station_id
+function setStationId(id_num) {
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  let station_id = document.getElementById('rx_station_id' + id_num).value;
+  receivers[rx_index].station_id = station_id;
+}
+
+//rx lat
+function setRxLat(id_num) {
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  let latitude = document.getElementById('latRx' + id_num).value;
+  receivers[rx_index].latitude = latitude;
+}
+
+//rx lon
+function setRxLon(id_num) {
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  let longitude = document.getElementById('lonRx' + id_num).value;
+  receivers[rx_index].longitude = longitude;
+}
+
+//rx heading
+function setHeading(id_num) {
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  let heading = document.getElementById('headingRx' + id_num).value;
+  receivers[rx_index].heading = heading;
+}
+
+//rx path
+function setRxPath(id_num) {
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  let pathfile = document.getElementById('pathfile' + id_num).value;
+  receivers[rx_index].pathfile = pathfile;
+}
+
+//rx speed
+function setRxSpeed(id_num) {
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  let speed = document.getElementById('speedRx' + id_num).value;
+  receivers[rx_index].speed = speed;
+}
+
+//rx client addr
+function setRxGps(id_num) {
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  let gpsAddr = document.getElementById('gpsurl' + id_num).value;
+  receivers[rx_index].gpsAddr = gpsAddr;
+}
+
+// min uptime
+function setMinUptime(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let minUptime = document.getElementById('latTx' + id_num).value;
+}
+// max uptime
+function setMaxUptime(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let
+}
+// min downtime
+function setMinDowntime(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let
+}
+// max downtime
+function setMaxDowntime(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let
+}
+
+//tx lat
+function setTxLat(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let latitude = document.getElementById('latTx' + id_num).value;
+  transmitters[tx_index].latitude = latitude;
+}
+
+//tx lon
+function setTxLon(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let longitude = document.getElementById('lonTx' + id_num).value;
+  transmitters[tx_index].longitude = longitude;
+}
+
+//tx heading
+function setHeading(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let heading = document.getElementById('headingTx' + id_num).value;
+  transmitters[tx_index].heading = heading;
+}
+
+//tx path
+function setTxPath(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let pathfile = document.getElementById('pathfile' + id_num).value;
+  transmitters[tx_index].pathfile = pathfile;
+}
+
+//tx speed
+function setTxSpeed(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let speed = document.getElementById('speedTx' + id_num).value;
+  transmitters[tx_index].speed = speed;
+}
+
+//tx client addr
+function setTxGps(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  let gpsAddr = document.getElementById('gpsurl' + id_num).value;
+  transmitters[tx_index].gpsAddr = gpsAddr;
+}
+
 function addNewRx(id_num) {
-  console.log("New RX Test");
+  receivers.push({rx_id: id_num,});
+  let rx_index = receivers.length - 1;
+  console.log("Receivers: " + receivers.length);
   //Add another receiver
-  delItem('new_rx_button');
+  delElement('new_rx_button');
 
   const newRx = document.createElement('div');
   newRx.id = "rx" + id_num;
@@ -23,12 +152,13 @@ function addNewRx(id_num) {
   station_id_span.innerHTML = "Station ID: ";
 
   const station_id = document.createElement('input');
-  station_id.id = 'rx-' + id_num + '-id';
+  station_id.id = 'rx_station_id' + id_num;
+  station_id.setAttribute('onfocusout', 'setStationId('+id_num+');');
 
   const stationaryRx = document.createElement('input');
   stationaryRx.type = 'radio';
   stationaryRx.id = 'stationaryRx' + id_num;
-  stationaryRx.name = 'rx' + id_num + '_type';
+  stationaryRx.name = 'rx_type' + id_num;
   stationaryRx.value = "stationary";
   stationaryRx.setAttribute('onclick', 'showStationaryRx(' + id_num + ');');
 
@@ -39,7 +169,7 @@ function addNewRx(id_num) {
   const mobileRx = document.createElement('input');
   mobileRx.type = 'radio';
   mobileRx.id = 'mobileRx' + id_num;
-  mobileRx.name = 'rx' + id_num + '_type';
+  mobileRx.name = 'rx_type' + id_num;
   mobileRx.value = "mobile";
   mobileRx.setAttribute('onclick', 'showMobileRx(' + id_num + ');');
 
@@ -50,7 +180,7 @@ function addNewRx(id_num) {
   const gpsRx = document.createElement('input');
   gpsRx.type = 'radio';
   gpsRx.id = 'gpsRx' + id_num;
-  gpsRx.name = 'rx' + id_num + '_type';
+  gpsRx.name = 'rx_type' + id_num;
   gpsRx.value = "gps";
   gpsRx.setAttribute('onclick', 'showGpsRx(' + id_num + ');');
 
@@ -69,7 +199,7 @@ function addNewRx(id_num) {
   delRxButton.id = 'del_rx_button';
   delRxButton.value = 'Delete';
   // delRxButton.style.float = 'right';
-  delRxButton.setAttribute('onclick', 'delItem(\'rx' + id_num + '\');');
+  delRxButton.setAttribute('onclick', 'delRx(' + id_num + ');');
 
   rx = document.getElementById('rx_card');
   rx.appendChild(newRx);
@@ -90,14 +220,18 @@ function addNewRx(id_num) {
   basicRxItems.appendChild(gpsRxLabel);
   basicRxItems.appendChild(document.createElement('br'));
 
+  const rxhr = document.createElement('hr');
+  rxhr.id = 'rxhr' + id_num;
+  rx.appendChild(rxhr);
   rx.appendChild(newRxButton);
   basicRxItems.appendChild(document.createElement('br'));
 }
 
 function addNewTx(id_num) {
-  console.log("New TX Test");
+  transmitters.push({tx_id: id_num,});
+  console.log("Transmitters: " + transmitters.length);
 
-  delItem('new_tx_button');
+  delElement('new_tx_button');
 
   const newTx = document.createElement('div');
   newTx.id = "tx" + id_num;
@@ -114,7 +248,7 @@ function addNewTx(id_num) {
 
   const uptimeMinInput = document.createElement('input');
   uptimeMinInput.type = 'number';
-  uptimeMinInput.id = 'tx-' + id_num + '-uptimeMin';
+  uptimeMinInput.id = 'tx-minUptime' + id_num;
 
   const uptimeMaxSpan = document.createElement('span');
   uptimeMaxSpan.className = 'field_labels';
@@ -122,7 +256,7 @@ function addNewTx(id_num) {
 
   const uptimeMaxInput = document.createElement('input');
   uptimeMaxInput.type = 'number';
-  uptimeMaxInput.id = 'tx-' + id_num + '-uptimeMax';
+  uptimeMaxInput.id = 'tx-maxUptime' + id_num;
 
   const downtimeMinSpan = document.createElement('span');
   downtimeMinSpan.className = 'field_labels';
@@ -130,7 +264,7 @@ function addNewTx(id_num) {
 
   const downtimeMinInput = document.createElement('input');
   downtimeMinInput.type = 'number';
-  downtimeMinInput.id = 'tx-' + id_num + '-downtimeMin';
+  downtimeMinInput.id = 'tx-minDowntime' + id_num;
 
   const downtimeMaxSpan = document.createElement('span');
   downtimeMaxSpan.className = 'field_labels';
@@ -138,7 +272,7 @@ function addNewTx(id_num) {
 
   const downtimeMaxInput = document.createElement('input');
   downtimeMaxInput.type = 'number';
-  downtimeMaxInput.id = 'tx-' + id_num + '-downtimeMax';
+  downtimeMaxInput.id = 'tx-maxDowntime' + id_num;
 
   const stationaryTx = document.createElement('input');
   stationaryTx.type = 'radio';
@@ -184,7 +318,7 @@ function addNewTx(id_num) {
   delTxButton.id = 'del_tx_button';
   delTxButton.value = 'Delete';
   // delTxButton.style.float = 'right';
-  delTxButton.setAttribute('onclick', 'delItem(\'tx' + id_num + '\');');
+  delTxButton.setAttribute('onclick', 'delTx(' + id_num + ');');
 
   tx = document.getElementById('tx_card');
   tx.appendChild(newTx);
@@ -214,6 +348,9 @@ function addNewTx(id_num) {
   basicTxItems.appendChild(gpsTxLabel);
   basicTxItems.appendChild(document.createElement('br'));
 
+  const txhr = document.createElement('hr');
+  txhr.id = 'txhr' + id_num;
+  tx.appendChild(txhr);
   tx.appendChild(newTxButton);
   basicTxItems.appendChild(document.createElement('br'));
   //Add another transmitter
@@ -226,7 +363,7 @@ function addNewScenario() {
 function showStationaryTx(id_num) {
   //Fields for stationary tx
   console.log("Stationary TX Test");
-  delItem('specialTxItems' + id_num);
+  delElement('specialTxItems' + id_num);
   const specialTx = document.createElement('div');
   specialTx.id = "specialTxItems" + id_num;
 
@@ -261,7 +398,7 @@ function showMobileTx(id_num) {
   //Fields for mobile tx
   console.log("Mobile TX Test");
 
-  delItem('specialTxItems' + id_num);
+  delElement('specialTxItems' + id_num);
   const specialTx = document.createElement('div');
   specialTx.id = "specialTxItems" + id_num;
 
@@ -298,7 +435,7 @@ function showGpsTx(id_num) {
   //Fields for GPS tx
   console.log("GPS TX Test");
 
-  delItem('specialTxItems' + id_num);
+  delElement('specialTxItems' + id_num);
   const specialTx = document.createElement('div');
   specialTx.id = "specialTxItems" + id_num;
 
@@ -323,12 +460,16 @@ function showStationaryRx(id_num) {
   //Fields for stationary rx
   console.log("Stationary RX Test");
 
-  delItem('specialRxItems' + id_num);
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  receivers[rx_index].rx_type = "stationary";
+
+  delElement('specialRxItems' + id_num);
   const specialRx = document.createElement('div');
   specialRx.id = "specialRxItems" + id_num;
 
   const latInput = document.createElement('input');
   latInput.id = 'latRx' + id_num;
+  latInput.setAttribute('onfocusout', 'setRxLat(' + id_num + ');');
 
   const latspan = document.createElement('span');
   latspan.className = "field_labels";
@@ -336,6 +477,7 @@ function showStationaryRx(id_num) {
 
   const lonInput = document.createElement('input');
   lonInput.id = 'lonRx' + id_num;
+  lonInput.setAttribute('onfocusout', 'setRxLon(' + id_num + ');');
 
   const lonspan = document.createElement('span');
   lonspan.className = "field_labels";
@@ -343,11 +485,11 @@ function showStationaryRx(id_num) {
 
   const headingInput = document.createElement('input');
   headingInput.id = 'headingRx' + id_num;
+  headingInput.setAttribute('onfocusout', 'setHeading(' + id_num + ');');
 
   const headingspan = document.createElement('span');
   headingspan.className = "field_labels";
   headingspan.innerHTML = "Heading: ";
-
 
   rx = document.getElementById('rx' + id_num);
   rx.append(specialRx);
@@ -367,21 +509,25 @@ function showStationaryRx(id_num) {
 function showMobileRx(id_num) {
   //Fields for mobile rx
   console.log("Mobile RX Test");
-  delItem('specialRxItems' + id_num);
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  receivers[rx_index].rx_type = "mobile";
+
+  delElement('specialRxItems' + id_num);
   const specialRx = document.createElement('div');
   specialRx.id = "specialRxItems" + id_num;
 
   const pathfile = document.createElement('input');
-  // pathfile.type = "file";
   pathfile.id = 'pathfile' + id_num;
+  pathfile.setAttribute('onfocusout', 'setRxPath(' + id_num + ');');
 
   const pathspan = document.createElement('span');
   pathspan.className = "field_labels";
   pathspan.innerHTML = "Path File: ";
 
   const speedInput = document.createElement('input');
-  speedInput.id = 'speedrx' + id_num;
+  speedInput.id = 'speedRx' + id_num;
   speedInput.type = "number";
+  speedInput.setAttribute('onfocusout', 'setRxSpeed(' + id_num + ');');
 
   const speedSpan = document.createElement('span');
   speedSpan.className = "field_labels";
@@ -404,13 +550,16 @@ function showGpsRx(id_num) {
   //Fields for GPS rx
   console.log("GPS RX Test");
 
-  delItem('specialRxItems' + id_num);
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  receivers[rx_index].rx_type = "gps";
+
+  delElement('specialRxItems' + id_num);
   const specialRx = document.createElement('div');
   specialRx.id = "specialRxItems" + id_num;
 
   const gpsurl = document.createElement('input');
-  // pathfile.type = "file";
   gpsurl.id = 'gpsurl' + id_num;
+  gpsurl.setAttribute('onfocusout', 'setRxGps(' + id_num + ');');
 
   const gpsurlspan = document.createElement('span');
   gpsurlspan.className = "field_labels";
@@ -425,7 +574,23 @@ function showGpsRx(id_num) {
   specialRx.appendChild(document.createElement('br'));
 }
 
-function delItem(deleteMe) {
+function delRx(id_num) {
+  let rx_index = receivers.findIndex(x => x.rx_id === id_num);
+  receivers.splice(rx_index, 1);
+  delElement('rx' + id_num);
+  delElement('rxhr' + id_num);
+  console.log("Deleting rx " + id_num + " at index " + rx_index);
+}
+
+function delTx(id_num) {
+  let tx_index = transmitters.findIndex(x => x.tx_id === id_num);
+  transmitters.splice(tx_index, 1);
+  delElement('tx' + id_num);
+  delElement('txhr' + id_num);
+  console.log("Deleting tx " + id_num + " at index " + tx_index);
+}
+
+function delElement(deleteMe) {
   //Delete a RX or TX
   if (document.contains(document.getElementById(deleteMe))) {
     document.getElementById(deleteMe).remove();

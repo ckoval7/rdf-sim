@@ -2,3 +2,4 @@ __pycache__/*
 *.kml
 dc_*
 *.bak
+*.json
