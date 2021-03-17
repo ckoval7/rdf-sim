@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 from os import system, name, kill, getpid
-from bottle import route, run, request, get, response, redirect, template, static_file
+from bottle import route, run, request, get, put, response, redirect, template, static_file
 import signal,sys
 import threading
+import json
 from optparse import OptionParser
 
 imports = """#!/usr/bin/env python3
@@ -155,6 +156,16 @@ def server_static(filepath):
 def home():
     return template('scenario_generator.tpl')
 
+@put('/make_scenario')
+def make_scenario():
+    data = json.load(request.body)
+    # print(type(data))
+    for tx in data['scenario']['transmitters']:
+        print(json.dumps(tx, sort_keys=True, indent=4))
+    for rx in data['scenario']['receivers']:
+        print(json.dumps(rx, sort_keys=True, indent=4))
+    return "Ok"
+
 def start_server(ipaddr = "127.0.0.1", port=8080):
     try:
         run(host=ipaddr, port=port, quiet=True, server="paste", debug=True)
@@ -179,6 +190,8 @@ if __name__ == '__main__':
     web = threading.Thread(target=start_server,args=(options.ipaddr, options.port))
     web.daemon = True
     web.start()
-
-    while True:
-        pass
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        finish()
