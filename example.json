@@ -1,0 +1,65 @@
+{
+  "name": "test1",
+  "scenario": {
+    "txOrder": "round_robin",
+    "name": "test",
+    "frequency": "120",
+    "transmitters": [
+      {
+        "tx_id": 0,
+        "tx_type": "stationary",
+        "minUptime": "30",
+        "maxUptime": "60",
+        "minDowntime": "10",
+        "maxDowntime": "20",
+        "latitude": "39.20030",
+        "longitude": "-76.86448"
+      },
+      {
+        "tx_id": 1,
+        "tx_type": "stationary",
+        "latitude": "39.341004",
+        "longitude": "-76.782304",
+        "minUptime": "45",
+        "maxUptime": "45",
+        "minDowntime": "5",
+        "maxDowntime": "15"
+      },
+      {
+        "tx_id": 2,
+        "tx_type": "mobile",
+        "minUptime": "10",
+        "maxUptime": "60",
+        "minDowntime": "10",
+        "maxDowntime": "15",
+        "pathfile": "tx_example_path.csv",
+        "speed": "20"
+      }
+    ],
+    "receivers": [
+      {
+        "rx_id": 0,
+        "rx_type": "mobile",
+        "station_id": "DF_ALPHA",
+        "pathfile": "rx_example_path.csv",
+        "speed": "25"
+      },
+      {
+        "rx_id": 1,
+        "rx_type": "stationary",
+        "station_id": "DF_BRAVO",
+        "latitude": "39.23757",
+        "longitude": "-76.87542",
+        "heading": "10"
+      },
+      {
+        "rx_id": 2,
+        "rx_type": "stationary",
+        "station_id": "DF_CHARLIE",
+        "latitude": "39.24015",
+        "longitude": "-76.75043",
+        "heading": "11"
+      }
+    ]
+  }
+}

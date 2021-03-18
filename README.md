@@ -9,4 +9,4 @@ New Instructions coming soon.
 
 Install dependencies: `pip3 install -r requirements.txt`
 
-Then run `run_df_sim_example.py`.
+Then run `run_df_sim.py -j example.json`.
