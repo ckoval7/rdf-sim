@@ -624,21 +624,33 @@ function checkform() {
     return true;
 }
 
+function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+    a.remove;
+}
+
 function submitJson() {
   if(checkform()) {
     scenario.transmitters = transmitters;
     scenario.receivers = receivers;
     dfEvent.scenario = scenario;
-    const otherParams = {
-        headers: {
-            "content-type": "application/json"
-        },
-        body: JSON.stringify(dfEvent),
-        method: "PUT"
-    };
-    fetch("/make_scenario", otherParams)
-        .then(res => {
-          console.log(JSON.stringify(dfEvent, null, 2));
-        })
+    let jsonData = JSON.stringify(dfEvent, null, 2)
+    console.log(jsonData);
+    download(jsonData, dfEvent.name + '.json', 'text/plain');
+    // const otherParams = {
+    //     headers: {
+    //         "content-type": "application/json"
+    //     },
+    //     body: JSON.stringify(dfEvent),
+    //     method: "PUT"
+    // };
+
+    // fetch("/make_scenario", otherParams)
+    //     .then(res => {
+    //     })
   }
 }

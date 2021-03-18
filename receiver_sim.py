@@ -32,6 +32,7 @@ class receiver:
             print(f"Problem connecting to {self.client_url}")
         self.location = (latitude, longitude)
 
+    movement_type = ""
     client_url = ""
     heading = 0
     speed = 0
@@ -60,6 +61,7 @@ class transmitter:
             print(f"Problem connecting to {self.client_url}")
         self.location = (latitude, longitude)
 
+    movement_type = ""
     client_url = ""
     heading = 0
     speed = 0
