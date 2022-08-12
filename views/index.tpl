@@ -2,8 +2,8 @@
 <head>
   <link rel="icon"
       type="image/png"
-      href="/static/fox.png">
-  <link rel="stylesheet" type="text/css" href="/static/style.css">
+      href="static/fox.png">
+  <link rel="stylesheet" type="text/css" href="static/style.css">
 </head>
 <body>
   <div class="header">
@@ -20,7 +20,7 @@
   <h4>Station {{id}}:</h4>
   <ul>
     <li><a href="{{id}}.xml">XML Data</a></li>
-    <li><a href="/static/compass/compass.html?station_id={{id}}">Compass</a></li>
+    <li><a href="static/compass/compass.html?station_id={{id}}">Compass</a></li>
   </ul>
   % end
 
